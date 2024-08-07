@@ -10,7 +10,6 @@ client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # Function to fetch data from the given URL
 def fetch_data(date):
     url = f'https://www.bestday123.com/{date}'
-    st.write(f"Fetching data from URL: {url}")  # 用于调试，显示生成的 URL
     response = requests.get(url)
     content = response.text
     
@@ -122,20 +121,43 @@ if st.button('查詢'):
     # 将输入日期转换为爬虫所需的格式 YYYYMMDD
     # date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
     data = fetch_data(date)
+    
     st.write('### 農民曆資訊')
     
+    # 显示普通项目
     for key, value in data.items():
-        if value:
+        if key not in ["宜", "忌"] and value:
             st.write(f"**{key}**: {value}")
-            if key in ["宜", "忌"]:
-                explanations = get_lunar_terms_explanations()
-                activities = value.split()
-                for activity in activities:
-                    explanation_text = explanations.get(activity, None)
-                    if explanation_text:
-                        if st.button(f"解釋 {activity}"):
-                            detailed_explanation = get_explanation(explanation_text)
-                            st.write(f"### {activity} 的解釋\n{detailed_explanation}")
+    
+    # 显示"宜"项目的每个子项
+    if data.get("宜"):
+        st.write('### 【宜】')
+        should_do_items = data["宜"].split()
+        for item in should_do_items:
+            col1, col2, col3 = st.columns([1, 3, 1])
+            with col1:
+                st.write(item)
+            with col2:
+                st.write(get_lunar_terms_explanations().get(item, ""))
+            with col3:
+                if st.button(f"解釋 {item}"):
+                    explanation = get_explanation(item)
+                    st.write(f"解釋: {explanation}")
+    
+    # 显示"忌"项目的每个子项
+    if data.get("忌"):
+        st.write('### 【忌】')
+        avoid_items = data["忌"].split()
+        for item in avoid_items:
+            col1, col2, col3 = st.columns([1, 3, 1])
+            with col1:
+                st.write(item)
+            with col2:
+                st.write(get_lunar_terms_explanations().get(item, ""))
+            with col3:
+                if st.button(f"解釋 {item}"):
+                    explanation = get_explanation(item)
+                    st.write(f"解釋: {explanation}")
 
     # 列印fetch_data的回傳結果進行偵錯
     st.write('### 調試資訊')
