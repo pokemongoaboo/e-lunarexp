@@ -122,33 +122,20 @@ if st.button('查詢'):
     # 将输入日期转换为爬虫所需的格式 YYYYMMDD
     # date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
     data = fetch_data(date)
-    
     st.write('### 農民曆資訊')
     
-    # 显示普通项目
     for key, value in data.items():
-        if key not in ["宜", "忌"] and value:
+        if value:
             st.write(f"**{key}**: {value}")
-    
-    # 显示"宜"项目的每个子项
-    if data.get("宜"):
-        st.write('### 【宜】')
-        should_do_items = data["宜"].split()
-        for item in should_do_items:
-            st.write(f"{item}")
-            if st.button(f"解釋 {item}"):
-                explanation = get_explanation(item)
-                st.write(f"解釋: {explanation}")
-    
-    # 显示"忌"项目的每个子项
-    if data.get("忌"):
-        st.write('### 【忌】')
-        avoid_items = data["忌"].split()
-        for item in avoid_items:
-            st.write(f"{item}")
-            if st.button(f"解釋 {item}"):
-                explanation = get_explanation(item)
-                st.write(f"解釋: {explanation}")
+            if key in ["宜", "忌"]:
+                explanations = get_lunar_terms_explanations()
+                activities = value.split()
+                for activity in activities:
+                    explanation_text = explanations.get(activity, None)
+                    if explanation_text:
+                        if st.button(f"解釋 {activity}"):
+                            detailed_explanation = get_explanation(explanation_text)
+                            st.write(f"### {activity} 的解釋\n{detailed_explanation}")
 
     # 列印fetch_data的回傳結果進行偵錯
     st.write('### 調試資訊')
