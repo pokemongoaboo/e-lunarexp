@@ -4,8 +4,12 @@ import re
 from datetime import datetime
 import openai
 
-# 設置OpenAI客戶端
-client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# 确保OpenAI API密钥已正确配置
+api_key = st.secrets.get("OPENAI_API_KEY")
+if not api_key:
+    st.error("OpenAI API密钥未配置。")
+else:
+    client = openai.OpenAI(api_key=api_key)
 
 # Function to fetch data from the given URL
 def fetch_data(date):
@@ -49,6 +53,7 @@ def fetch_data(date):
 
 # Function to get explanation from OpenAI
 def get_explanation(prompt):
+    st.write(f"Requesting explanation for prompt: {prompt}")  # 打印请求的prompt进行调试
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -120,7 +125,7 @@ date = st.text_input('輸入查詢日期 (格式: YYYY年MM月DD日)', today)
 
 if st.button('查詢'):
     # 将输入日期转换为爬虫所需的格式 YYYYMMDD
-    # date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
+    #date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
     data = fetch_data(date)
     
     st.write('### 農民曆資訊')
@@ -142,7 +147,7 @@ if st.button('查詢'):
                 explanation_text = get_lunar_terms_explanations().get(item, "")
                 st.write(explanation_text)
             with col3:
-                if st.button(f"解釋 {item}", key=item):
+                if st.button(f"解釋 {item}", key=f"解釋 {item}"):
                     prompt = f"<建議事項> : {item} {explanation_text}"
                     explanation = get_explanation(prompt)
                     st.write(f"解釋: {explanation}")
@@ -159,7 +164,7 @@ if st.button('查詢'):
                 explanation_text = get_lunar_terms_explanations().get(item, "")
                 st.write(explanation_text)
             with col3:
-                if st.button(f"解釋 {item}", key=item):
+                if st.button(f"解釋 {item}", key=f"解釋 {item}"):
                     prompt = f"<建議事項> : {item} {explanation_text}"
                     explanation = get_explanation(prompt)
                     st.write(f"解釋: {explanation}")
