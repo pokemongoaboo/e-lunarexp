@@ -102,12 +102,14 @@ def get_lunar_terms_explanations():
 # Streamlit app
 st.title('農民曆資訊查詢系統')
 
-# 獲取今天的日期並格式化為YYYYMMDD
-today = datetime.today().strftime('%Y%m%d')
-date = st.text_input('輸入查詢日期 (格式: YYYYMMDD)', today)
+# 獲取今天的日期並格式化為2024年08月07日
+today = datetime.today().strftime('%Y年%m月%d日')
+date = st.text_input('輸入查詢日期 (格式: YYYY年MM月DD日)', today)
 
 if st.button('查詢'):
-    data = fetch_data(date)
+    # 将输入日期转换为爬虫所需的格式 YYYYMMDD
+    date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
+    data = fetch_data(date_str)
     st.write('### 農民曆資訊')
     
     for key, value in data.items():
@@ -122,3 +124,7 @@ if st.button('查詢'):
                         if st.button(f"解釋 {activity}"):
                             detailed_explanation = get_explanation(explanation_text)
                             st.write(f"### {activity} 的解釋\n{detailed_explanation}")
+
+    # 列印fetch_data的回傳結果進行偵錯
+    st.write('### 調試資訊')
+    st.write(data)
