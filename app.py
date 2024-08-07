@@ -101,6 +101,8 @@ def get_lunar_terms_explanations():
         "出火": "移動神明之位。",
         "會親友": "拜訪或宴請親友。",
         "求醫治病": "就醫治療或動手術。",
+        "求醫": "就醫治療或動手術。",
+        "治病": "就醫治療或動手術。",
         "立券": "訂立各種契約之事。",
         "交易": "訂立各種買賣之事。",
         "交車": "點交新購之汽機車。",
@@ -119,7 +121,7 @@ date = st.text_input('輸入查詢日期 (格式: YYYY年MM月DD日)', today)
 
 if st.button('查詢'):
     # 将输入日期转换为爬虫所需的格式 YYYYMMDD
-    # date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
+    #date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
     data = fetch_data(date)
     
     st.write('### 農民曆資訊')
@@ -138,10 +140,11 @@ if st.button('查詢'):
             with col1:
                 st.write(item)
             with col2:
-                st.write(get_lunar_terms_explanations().get(item, ""))
+                explanation_text = get_lunar_terms_explanations().get(item, "")
+                st.write(explanation_text)
             with col3:
-                if st.button(f"解釋 {item}"):
-                    prompt = f"<建議事項> : {item} {get_lunar_terms_explanations().get(item, '')}"
+                if st.button(f"解釋 {item}", key=item):
+                    prompt = f"<建議事項> : {item} {explanation_text}"
                     explanation = get_explanation(prompt)
                     st.write(f"解釋: {explanation}")
     
@@ -154,10 +157,11 @@ if st.button('查詢'):
             with col1:
                 st.write(item)
             with col2:
-                st.write(get_lunar_terms_explanations().get(item, ""))
+                explanation_text = get_lunar_terms_explanations().get(item, "")
+                st.write(explanation_text)
             with col3:
-                if st.button(f"解釋 {item}"):
-                    prompt = f"<建議事項> : {item} {get_lunar_terms_explanations().get(item, '')}"
+                if st.button(f"解釋 {item}", key=item):
+                    prompt = f"<建議事項> : {item} {explanation_text}"
                     explanation = get_explanation(prompt)
                     st.write(f"解釋: {explanation}")
 
