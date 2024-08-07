@@ -122,20 +122,28 @@ if st.button('查詢'):
     # 将输入日期转换为爬虫所需的格式 YYYYMMDD
     # date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
     data = fetch_data(date)
+    
     st.write('### 農民曆資訊')
     
+    table_data = []
     for key, value in data.items():
         if value:
-            st.write(f"**{key}**: {value}")
-            if key in ["宜", "忌"]:
-                explanations = get_lunar_terms_explanations()
-                activities = value.split()
-                for activity in activities:
-                    explanation_text = explanations.get(activity, None)
-                    if explanation_text:
-                        if st.button(f"解釋 {activity}"):
-                            detailed_explanation = get_explanation(explanation_text)
-                            st.write(f"### {activity} 的解釋\n{detailed_explanation}")
+            explanations = get_lunar_terms_explanations()
+            row = {
+                "項目": key,
+                "內容": value,
+            }
+            table_data.append(row)
+    
+    for row in table_data:
+        st.write(f"**{row['項目']}**: {row['內容']}")
+        if row['項目'] in ["宜", "忌"]:
+            activities = row['內容'].split()
+            for activity in activities:
+                explanation_text = explanations.get(activity, "")
+                if st.button(f"解釋 {activity}"):
+                    detailed_explanation = get_explanation(explanation_text)
+                    st.write(f"### {activity} 的解釋\n{detailed_explanation}")
 
     # 列印fetch_data的回傳結果進行偵錯
     st.write('### 調試資訊')
