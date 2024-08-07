@@ -46,7 +46,7 @@ def get_explanation(prompt):
         ],
         max_tokens=150
     )
-    return response.choices[0].message['content'].strip()
+    return response['choices'][0]['message']['content'].strip()
 
 # Function to get Lunar Terms Explanations
 def get_lunar_terms_explanations():
@@ -115,8 +115,10 @@ if st.button('查詢'):
             st.write(f"**{key}**: {value}")
             if key in ["宜", "忌"]:
                 explanations = get_lunar_terms_explanations()
-                explanation_text = explanations.get(value, None)
-                if explanation_text:
-                    if st.button(f"解釋 {key}"):
-                        detailed_explanation = get_explanation(explanation_text)
-                        st.write(f"### {key} 的解釋\n{detailed_explanation}")
+                activities = value.split()
+                for activity in activities:
+                    explanation_text = explanations.get(activity, None)
+                    if explanation_text:
+                        if st.button(f"解釋 {activity}"):
+                            detailed_explanation = get_explanation(explanation_text)
+                            st.write(f"### {activity} 的解釋\n{detailed_explanation}")
