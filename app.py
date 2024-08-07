@@ -31,7 +31,7 @@ def fetch_data(date):
 
 # Function to extract specific data from HTML
 def extract_data(soup, field_name):
-    tag = soup.find(text=field_name)
+    tag = soup.find(string=field_name)
     if tag:
         return tag.find_next('td').text.strip()
     return None
