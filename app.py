@@ -54,7 +54,7 @@ def fetch_data(date):
 # Function to get explanation from OpenAI
 def get_explanation(prompt):
     st.write(f"Requesting explanation for prompt: {prompt}")  # 打印请求的prompt进行调试
-    try:
+    #try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -65,9 +65,9 @@ def get_explanation(prompt):
         )
         st.write(response)  # 打印OpenAI API的响应内容进行调试
         return response.choices[0].message["content"].strip()
-    except Exception as e:
-        st.error(f"OpenAI API请求失败: {e}")
-        return "OpenAI API请求失败"
+    #except Exception as e:
+    #    st.error(f"OpenAI API请求失败: {e}")
+    #    return "OpenAI API请求失败"
 
 # Function to get Lunar Terms Explanations
 def get_lunar_terms_explanations():
