@@ -54,16 +54,20 @@ def fetch_data(date):
 # Function to get explanation from OpenAI
 def get_explanation(prompt):
     st.write(f"Requesting explanation for prompt: {prompt}")  # 打印请求的prompt进行调试
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "你是一位農民曆解說專家。請用白話文解釋以下農民曆條文的涵義並提供建議事項。"},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=150
-    )
-    st.write(response)  # 打印OpenAI API的响应内容进行调试
-    return response['choices'][0]['message']['content'].strip()
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "你是一位農民曆解說專家。請用白話文解釋以下農民曆條文的涵義並提供建議事項。"},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=150
+        )
+        st.write(response)  # 打印OpenAI API的响应内容进行调试
+        return response['choices'][0]['message']['content'].strip()
+    except Exception as e:
+        st.error(f"OpenAI API请求失败: {e}")
+        return "OpenAI API请求失败"
 
 # Function to get Lunar Terms Explanations
 def get_lunar_terms_explanations():
@@ -125,7 +129,7 @@ date = st.text_input('輸入查詢日期 (格式: YYYY年MM月DD日)', today)
 
 if st.button('查詢'):
     # 将输入日期转换为爬虫所需的格式 YYYYMMDD
-    #date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
+    # date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
     data = fetch_data(date)
     
     st.write('### 農民曆資訊')
