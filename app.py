@@ -125,25 +125,30 @@ if st.button('查詢'):
     
     st.write('### 農民曆資訊')
     
-    table_data = []
+    # 显示普通项目
     for key, value in data.items():
-        if value:
-            explanations = get_lunar_terms_explanations()
-            row = {
-                "項目": key,
-                "內容": value,
-            }
-            table_data.append(row)
+        if key not in ["宜", "忌"] and value:
+            st.write(f"**{key}**: {value}")
     
-    for row in table_data:
-        st.write(f"**{row['項目']}**: {row['內容']}")
-        if row['項目'] in ["宜", "忌"]:
-            activities = row['內容'].split()
-            for activity in activities:
-                explanation_text = explanations.get(activity, "")
-                if st.button(f"解釋 {activity}"):
-                    detailed_explanation = get_explanation(explanation_text)
-                    st.write(f"### {activity} 的解釋\n{detailed_explanation}")
+    # 显示"宜"项目的每个子项
+    if data.get("宜"):
+        st.write('### 【宜】')
+        should_do_items = data["宜"].split()
+        for item in should_do_items:
+            st.write(f"{item}")
+            if st.button(f"解釋 {item}"):
+                explanation = get_explanation(item)
+                st.write(f"解釋: {explanation}")
+    
+    # 显示"忌"项目的每个子项
+    if data.get("忌"):
+        st.write('### 【忌】')
+        avoid_items = data["忌"].split()
+        for item in avoid_items:
+            st.write(f"{item}")
+            if st.button(f"解釋 {item}"):
+                explanation = get_explanation(item)
+                st.write(f"解釋: {explanation}")
 
     # 列印fetch_data的回傳結果進行偵錯
     st.write('### 調試資訊')
