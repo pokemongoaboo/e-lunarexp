@@ -141,7 +141,8 @@ if st.button('查詢'):
                 st.write(get_lunar_terms_explanations().get(item, ""))
             with col3:
                 if st.button(f"解釋 {item}"):
-                    explanation = get_explanation(item)
+                    prompt = f"<建議事項> : {item} {get_lunar_terms_explanations().get(item, '')}"
+                    explanation = get_explanation(prompt)
                     st.write(f"解釋: {explanation}")
     
     # 显示"忌"项目的每个子项
@@ -156,7 +157,8 @@ if st.button('查詢'):
                 st.write(get_lunar_terms_explanations().get(item, ""))
             with col3:
                 if st.button(f"解釋 {item}"):
-                    explanation = get_explanation(item)
+                    prompt = f"<建議事項> : {item} {get_lunar_terms_explanations().get(item, '')}"
+                    explanation = get_explanation(prompt)
                     st.write(f"解釋: {explanation}")
 
     # 列印fetch_data的回傳結果進行偵錯
