@@ -57,6 +57,7 @@ def get_explanation(prompt):
         ],
         max_tokens=150
     )
+    st.write(response)  # 打印OpenAI API的响应内容进行调试
     return response['choices'][0]['message']['content'].strip()
 
 # Function to get Lunar Terms Explanations
@@ -101,8 +102,6 @@ def get_lunar_terms_explanations():
         "出火": "移動神明之位。",
         "會親友": "拜訪或宴請親友。",
         "求醫治病": "就醫治療或動手術。",
-        "求醫": "就醫治療或動手術。",
-        "治病": "就醫治療或動手術。",
         "立券": "訂立各種契約之事。",
         "交易": "訂立各種買賣之事。",
         "交車": "點交新購之汽機車。",
@@ -121,7 +120,7 @@ date = st.text_input('輸入查詢日期 (格式: YYYY年MM月DD日)', today)
 
 if st.button('查詢'):
     # 将输入日期转换为爬虫所需的格式 YYYYMMDD
-    #date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
+    # date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
     data = fetch_data(date)
     
     st.write('### 農民曆資訊')
