@@ -2,3 +2,4 @@ streamlit
 pillow
 openai
 requests
+beautifulsoup4
