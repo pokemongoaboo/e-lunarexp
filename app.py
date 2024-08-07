@@ -1,8 +1,8 @@
 import streamlit as st
 import requests
-from bs4 import BeautifulSoup
-import openai
+import re
 from datetime import datetime
+import openai
 
 # 設置OpenAI客戶端
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -10,32 +10,43 @@ client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # Function to fetch data from the given URL
 def fetch_data(date):
     url = f'https://www.bestday123.com/{date}'
-    st.write(f"Fetching data from URL: {url}")
+    st.write(f"Fetching data from URL: {url}")  # 用于调试，显示生成的 URL
     response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
+    content = response.text
     
+    # Function to extract data using regex
+    def extract_data(pattern):
+        match = re.search(pattern, content)
+        return match.group(1).strip().replace('&nbsp;', ' ') if match else None
+
+    # 使用正则表达式提取所有需要的信息
+    date_info = extract_data(r'【日期】</td><td>(.*?)</td>')
+    lunar_info = extract_data(r'【農曆】</td><td>(.*?)</td>')
+    year_info = extract_data(r'【歲次】</td><td>(.*?)</td>')
+    deity_info = extract_data(r'【每日胎神占方】</td><td>(.*?)</td>')
+    element_info = extract_data(r'【五行】</td><td>(.*?)</td>')
+    clash_info = extract_data(r'【沖】</td><td>(.*?)</td>')
+    taboos_info = extract_data(r'【彭祖百忌】</td><td>(.*?)</td>')
+    auspicious_info = extract_data(r'【吉神宜趨】</td><td>(.*?)</td>')
+    should_do_info = extract_data(r'<font color=#1EFB>【宜】</font></td><td>(.*?)</td>')
+    should_avoid_info = extract_data(r'【凶神宜忌】</td><td>(.*?)</td>')
+    avoid_info = extract_data(r'<font color=#E2A500>【忌】</font></td><td>(.*?)</td>')
+
     data = {
-        "日期": extract_data(soup, '日期'),
-        "農曆": extract_data(soup, '農曆'),
-        "歲次": extract_data(soup, '歲次'),
-        "每日胎神占方": extract_data(soup, '每日胎神占方'),
-        "五行": extract_data(soup, '五行'),
-        "沖": extract_data(soup, '沖'),
-        "彭祖百忌": extract_data(soup, '彭祖百忌'),
-        "吉神宜趨": extract_data(soup, '吉神宜趨'),
-        "宜": extract_data(soup, '宜'),
-        "凶神宜忌": extract_data(soup, '凶神宜忌'),
-        "忌": extract_data(soup, '忌'),
+        "日期": date_info,
+        "農曆": lunar_info,
+        "歲次": year_info,
+        "每日胎神占方": deity_info,
+        "五行": element_info,
+        "沖": clash_info,
+        "彭祖百忌": taboos_info,
+        "吉神宜趨": auspicious_info,
+        "宜": should_do_info,
+        "凶神宜忌": should_avoid_info,
+        "忌": avoid_info,
     }
     
     return data
-
-# Function to extract specific data from HTML
-def extract_data(soup, field_name):
-    tag = soup.find(string=field_name)
-    if tag:
-        return tag.find_next('td').text.strip()
-    return None
 
 # Function to get explanation from OpenAI
 def get_explanation(prompt):
