@@ -46,7 +46,7 @@ def get_explanation(prompt):
         ],
         max_tokens=150
     )
-    return response.choices[0].message["content"].strip()
+    return response.choices[0].message['content'].strip()
 
 # Function to get Lunar Terms Explanations
 def get_lunar_terms_explanations():
