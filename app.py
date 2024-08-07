@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import openai
-
+from openai import OpenAI
 
 
 # 設置OpenAI客戶端
