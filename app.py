@@ -10,7 +10,7 @@ client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # Function to fetch data from the given URL
 def fetch_data(date):
     url = f'https://www.bestday123.com/{date}'
- st.write(url)
+st.write(f"Fetching data from URL: {url}")
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     
