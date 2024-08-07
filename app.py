@@ -127,11 +127,19 @@ st.title('農民曆資訊查詢系統')
 today = datetime.today().strftime('%Y年%m月%d日')
 date = st.text_input('輸入查詢日期 (格式: YYYY年MM月DD日)', today)
 
+if 'data' not in st.session_state:
+    st.session_state.data = None
+if 'explanations' not in st.session_state:
+    st.session_state.explanations = {}
+
 if st.button('查詢'):
     # 将输入日期转换为爬虫所需的格式 YYYYMMDD
-    # date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
-    data = fetch_data(date)
-    
+    #date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
+    st.session_state.data = fetch_data(date)
+
+data = st.session_state.data
+
+if data:
     st.write('### 農民曆資訊')
     
     # 显示普通项目
@@ -153,8 +161,9 @@ if st.button('查詢'):
             with col3:
                 if st.button(f"解釋 {item}", key=f"解釋 {item}"):
                     prompt = f"<建議事項> : {item} {explanation_text}"
-                    explanation = get_explanation(prompt)
-                    st.write(f"解釋: {explanation}")
+                    st.session_state.explanations[item] = get_explanation(prompt)
+                if item in st.session_state.explanations:
+                    st.write(f"解釋: {st.session_state.explanations[item]}")
     
     # 显示"忌"项目的每个子项
     if data.get("忌"):
@@ -170,8 +179,9 @@ if st.button('查詢'):
             with col3:
                 if st.button(f"解釋 {item}", key=f"解釋 {item}"):
                     prompt = f"<建議事項> : {item} {explanation_text}"
-                    explanation = get_explanation(prompt)
-                    st.write(f"解釋: {explanation}")
+                    st.session_state.explanations[item] = get_explanation(prompt)
+                if item in st.session_state.explanations:
+                    st.write(f"解釋: {st.session_state.explanations[item]}")
 
     # 列印fetch_data的回傳結果進行偵錯
     st.write('### 調試資訊')
