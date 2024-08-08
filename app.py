@@ -133,8 +133,8 @@ if 'explanations' not in st.session_state:
 
 if st.button('查詢'):
     # 将输入日期转换为爬虫所需的格式 YYYYMMDD
-    date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
-    st.session_state.data = fetch_data(date_str)
+    #date_str = datetime.strptime(date, '%Y年%m月%d日').strftime('%Y%m%d')
+    st.session_state.data = fetch_data(date)
 
 data = st.session_state.data
 
