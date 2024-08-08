@@ -58,7 +58,7 @@ def get_explanation(prompt):
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "你是一位農民曆解說專家。請用白話文解釋以下農民曆條文的涵義並提供建議事項。"},
+                {"role": "system", "content": "你是一位農民曆解說專家。請用白話文解釋以下農民曆條文的涵義並提供建議事項，儘量在tokens限制內，把建議說完。"},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=300
