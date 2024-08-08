@@ -148,28 +148,24 @@ if data:
     # Function to create and display a table for "宜" or "忌" items
     def display_items_table(items, title):
         st.write(f'### 【{title}】')
-        df = pd.DataFrame(columns=['項目', '解釋', '詳細說明'])
+        df = pd.DataFrame(columns=['項目', '解釋'])
         for item in items.split():
             explanation = get_lunar_terms_explanations().get(item, "")
-            df = pd.concat([df, pd.DataFrame({'項目': [item], '解釋': [explanation], '詳細說明': ['']})], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame({'項目': [item], '解釋': [explanation]})], ignore_index=True)
         
-        # Function to handle button click
-        def on_button_click(item):
-            prompt = f"<建議事項> : {item} {df.loc[df['項目'] == item, '解釋'].values[0]}"
-            st.session_state.explanations[f"{title}_{item}"] = get_explanation(prompt)
-            st.experimental_rerun()
-
-        # Add buttons to the dataframe
-        df['詳細說明'] = df.apply(lambda row: st.button(f"解釋 {row['項目']}", key=f"解釋_{title}_{row['項目']}", on_click=on_button_click, args=(row['項目'],)), axis=1)
-
         # Display the table
-        st.dataframe(df, hide_index=True)
+        st.table(df)
         
-        # Display explanations
-        for item in df['項目']:
+        # Add buttons and display explanations
+        for index, row in df.iterrows():
+            item = row['項目']
+            if st.button(f"解釋 {item}", key=f"解釋_{title}_{item}"):
+                prompt = f"<建議事項> : {item} {row['解釋']}"
+                st.session_state.explanations[f"{title}_{item}"] = get_explanation(prompt)
+            
             if f"{title}_{item}" in st.session_state.explanations:
                 explanation = st.session_state.explanations[f"{title}_{item}"]
-                st.markdown(f"<div style='background-color: #e6f3ff; padding: 10px; border-radius: 5px;'><b>{item} 詳細說明：</b><br>{explanation}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='background-color: #e6f3ff; padding: 10px; border-radius: 5px; margin-bottom: 10px;'><b>{item} 詳細說明：</b><br>{explanation}</div>", unsafe_allow_html=True)
     
     # Display "宜" items
     if data.get("宜"):
