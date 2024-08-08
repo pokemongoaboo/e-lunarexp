@@ -61,7 +61,7 @@ def get_explanation(prompt):
                 {"role": "system", "content": "你是一位農民曆解說專家。請用白話文解釋以下農民曆條文的涵義並提供建議事項。"},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=150
+            max_tokens=300
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
