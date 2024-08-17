@@ -170,7 +170,7 @@ if data:
         # Add buttons and display explanations
         for index, row in df.iterrows():
             item = row['項目']
-            if st.button(f"解釋(Advices) {item}", key=f"解釋_{title}_{item}"):
+            if st.button(f"解釋(Advices for :) {item}", key=f"解釋_{title}_{item}"):
                 prompt = f"<建議事項> : {item} {row['解釋']}"
                 st.session_state.explanations[f"{title}_{item}"] = get_explanation(prompt)
             
