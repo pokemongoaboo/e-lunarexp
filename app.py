@@ -126,15 +126,12 @@ st.set_page_config(page_title="農民曆資訊查詢", layout="wide")
 
     # 使用 markdown 來創建置中的兩行標題
     st.markdown("""
-    <h1 style="text-align: center;">農民曆資訊查詢與建議</h1>
+    <h1 style="text-align: center;">資訊查詢與建議</h1>
     <h2 style="text-align: center;">(Lunar Calendar Advices)</h2>
     """, unsafe_allow_html=True)
 
     # 添加一些間距
     st.markdown("<br>", unsafe_allow_html=True)
-    
-
-
 
 # 獲取今天的日期並格式化為2024年08月07日
 today = datetime.today().strftime('%Y年%m月%d日')
