@@ -126,7 +126,7 @@ st.set_page_config(page_title="農民曆資訊查詢", layout="wide")
 
 # 使用 markdown 來創建置中的兩行標題
 st.markdown("""
-    <h1 style="text-align: center;">資訊查詢與建議</h1>
+    <h1 style="text-align: center;">農民曆資訊查詢與建議</h1>
     <h2 style="text-align: center;">(Lunar Calendar Advices)</h2>
     """, unsafe_allow_html=True)
 
@@ -142,7 +142,7 @@ if 'data' not in st.session_state:
 if 'explanations' not in st.session_state:
     st.session_state.explanations = {}
 
-if st.button('查詢'):
+if st.button('查詢(Query)'):
     st.session_state.data = fetch_data(date)
 
 data = st.session_state.data
@@ -170,7 +170,7 @@ if data:
         # Add buttons and display explanations
         for index, row in df.iterrows():
             item = row['項目']
-            if st.button(f"解釋 {item}", key=f"解釋_{title}_{item}"):
+            if st.button(f"解釋(Advices) {item}", key=f"解釋_{title}_{item}"):
                 prompt = f"<建議事項> : {item} {row['解釋']}"
                 st.session_state.explanations[f"{title}_{item}"] = get_explanation(prompt)
             
@@ -187,5 +187,5 @@ if data:
         display_items_table(data["忌"], "忌")
 
     # 列印fetch_data的回傳結果進行偵錯
-    st.write('### 調試資訊')
-    st.write(data)
+    # st.write('### 調試資訊')
+    # st.write(data)
