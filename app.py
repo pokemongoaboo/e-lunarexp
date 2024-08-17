@@ -120,7 +120,18 @@ def get_lunar_terms_explanations():
     }
 
 # Streamlit app
-st.title('農民曆資訊查詢系統')
+#st.title('農民曆資訊查詢系統(Lunar Calendar Query and')
+
+# 使用 markdown 來創建置中的兩行標題
+    st.markdown("""
+    <h1 style="text-align: center;">農民曆資訊查詢</h1>
+    <h2 style="text-align: center;">(Lunar Calendar)</h2>
+    """, unsafe_allow_html=True)
+
+    # 添加一些間距
+    st.markdown("<br>", unsafe_allow_html=True)
+
+
 
 # 獲取今天的日期並格式化為2024年08月07日
 today = datetime.today().strftime('%Y年%m月%d日')
@@ -137,7 +148,7 @@ if st.button('查詢'):
 data = st.session_state.data
 
 if data:
-    st.write('### 農民曆資訊')
+    st.write('### 農民曆資訊(Lunar Calendar)')
     
     # Create a dataframe for general information
     general_info = {key: [value] for key, value in data.items() if key not in ["宜", "忌"] and value}
