@@ -122,14 +122,17 @@ def get_lunar_terms_explanations():
 # Streamlit app
 #st.title('農民曆資訊查詢系統(Lunar Calendar Query and')
 
-# 使用 markdown 來創建置中的兩行標題
+st.set_page_config(page_title="農民曆資訊查詢", layout="wide")
+
+    # 使用 markdown 來創建置中的兩行標題
     st.markdown("""
-    <h1 style="text-align: center;">農民曆資訊查詢</h1>
-    <h2 style="text-align: center;">(Lunar Calendar)</h2>
+    <h1 style="text-align: center;">農民曆資訊查詢與建議</h1>
+    <h2 style="text-align: center;">(Lunar Calendar Advices)</h2>
     """, unsafe_allow_html=True)
 
     # 添加一些間距
     st.markdown("<br>", unsafe_allow_html=True)
+    
 
 
 
